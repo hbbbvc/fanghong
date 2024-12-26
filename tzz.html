@@ -126,7 +126,7 @@ var url = new URLSearchParams(window.location.search).get('url');
             iframe.style.display = "none";
             document.body.appendChild(iframe);
           } else {}        
-      } else{window.location.href = url;}                                                      
+      } else{window.location.href = atob(url);}                                                      
 </script> 
         </div> 
        </div> 
