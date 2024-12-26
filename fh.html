@@ -131,4 +131,15 @@
             document.body.removeChild(textArea);
         }
 
-        
+        // 按下回车时调用 getUrl
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                getUrl();
+            }
+        }
+    </script>
+
+    <script src="assets/js/main.js" defer=""></script>
+</body>
+</html>
