@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <link rel="icon" href="https://maxpcimg.cc/i/2024/11/03/6727924c98384.webp">
+    <title>防红直链生成接口 域名直链 直链打开 防红跳转</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="keywords" content="防红直链生成接口 域名直链 直链打开 防红跳转">
+    <meta name='description' content='QQ微信直链打开,QQ微信引导浏览器打开,QQ微信防红接口'>
+    <link rel="stylesheet" href="https://fanghong.zeabur.app/assets/css/main.css" />
+    <style>
+        #resultContainer {
+            color: #1cb495;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #shortUrl {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            flex: 1;
+        }
+        #copyButton:hover {
+            background-color: #45a049;
+        }
+        body {
+            background-color: #000;
+            background-size: cover;
+            background-position: center;
+            animation: backgroundChange 20s infinite;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <header id="header">
+        <h1>防红接口</h1>
+        <div style="margin: 0; padding: 0;">
+            <p style="margin: 0; padding: 0;">
+                在下方输入需要跳转的链接，即可生成防红接口。<br>
+                复制下方生成的链接，粘贴到微信或者QQ即可。
+                </p>
+            <a href="zhuanma">点击这里跳转到防红二维码</a>
+            <p style="margin: 0; padding: 0;font-size: 14px;">
+                (直链打开可解决QQ提示非官方页面问题)</p>
+        </div>
+    </header>
+
+    <form id="signup-form" method="post">
+        <input type="url" name="targetUrl" id="targetUrl" placeholder="需要生成的网址" onkeydown="handleKeyDown(event)" style="border-radius:100px;">
+        <select name="type" class="btn-default form-control" style="width: auto; cursor: pointer;border-radius:100px;" title="点击选择生成接口" id="type">
+            <option>选择接口...</option>
+            <option value="1">微信/支付宝直链打开</option>
+            <option value="2">微信/支付宝跳转打开</option>
+        </select>
+        </br>
+        <input type="button" value="生成" id="generateButton" onclick="getUrl()" />
+    </form>
+
+    <div style="display: flex;align-items: center;">
+        <input type="checkbox" name="agree" id="agree" style="width: 16px;height: 16px;display: inline-block;">
+        <label for="agree" style="margin: 0 16px;color: rgba(255,255,255,.5);">我同意<a style="color: rgba(255,255,255,.5);" href="//weixin.qq.com/cgi-bin/readtemplate?t=weixin_external_links_content_management_specification">《链接内容管理规范》</a></label>
+    </div>
+
+    <div id="resultContainer">
+        <!-- 短链接结果显示框 -->
+    </div>
+
+    <footer id="footer">
+        <ul class="icons">
+            <li><a href="" class="icon brands fa-github" target="_blank"><span class="label"></span></a></li>
+        </ul>
+        <ul class="copyright">
+            <li>&copy; Powered by <a href="" target="_blank"></a></li>
+        </ul>
+    </footer>
+
+    <script>
+        function getUrl() {
+            var apiUrl;
+            var targetUrl = document.getElementById('targetUrl').value;
+            var type = document.getElementById('type').value;
+            var generateButton = document.getElementById('generateButton');
+            var resultContainer = document.getElementById('resultContainer');
+            var agreeCheckbox = document.getElementById('agree');
+
+            // 检查用户是否同意
+            if (!agreeCheckbox.checked) {
+                alert('请您同意《链接内容管理规范》后再生成链接。');
+                return;
+            }
+
+            if (targetUrl === '') {
+                alert('请输入需要跳转的网址');
+                return;
+            }
+
+            // 显示正在加载的提示并禁用按钮
+            generateButton.disabled = true;
+            generateButton.value = '正在生成...';
+
+            if (type === '1') {
+                apiUrl = 'https://qilin8.zeabur.app/zhilian.html?u=' + btoa(targetUrl);
+            } else if (type === '2') {
+                apiUrl = 'https://qilin8.zeabur.app/tzz.html?url=' + btoa(targetUrl);
+            }
+
+            generateButton.disabled = false;
+            generateButton.value = '生成';
+            resultContainer.innerHTML = `
+                <div id="shortUrlDisplay" onclick="copyToClipboard()">${apiUrl}</div>
+            `;
+        }
+
+        // 复制短链接到剪贴板
+        function copyToClipboard() {
+            var shortUrl = document.getElementById('shortUrlDisplay').innerText;
+            var textArea = document.createElement('textarea');
+            textArea.value = shortUrl;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                document.getElementById('resultContainer').innerHTML = `
+                    <div id="shortUrlDisplay" onclick="copyToClipboard()">复制成功</div>
+                `;
+            } catch (err) {
+                alert('复制失败，请手动复制');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        
