@@ -39,9 +39,10 @@
         <div style="margin: 0; padding: 0;">
             <p style="margin: 0; padding: 0;">
                 在下方输入需要跳转的链接，即可生成防红接口。<br>
-                复制下方生成的链接，粘贴到微信或者QQ即可。请求必须以http或https开头
+                复制下方生成的链接，粘贴到微信或者QQ即可。
+                网址必须以http://或https://开头
                 </p>
-            <a href="zhuanma">点击这里跳转到防红二维码</a>
+            <a href="https://cn.bing.com/search?q=%E7%BD%91%E5%9D%80%E8%BD%AC%E4%BA%8C%E7%BB%B4%E7%A0%81&setmkt=zh-CN&PC=EMMX01&form=LBT003&scope=web">点击这里跳转到二维码生成器</a>
             <p style="margin: 0; padding: 0;font-size: 14px;">
                 (直链打开可解决QQ提示非官方页面问题)</p>
         </div>
@@ -53,6 +54,7 @@
             <option>选择接口...</option>
             <option value="1">微信/支付宝直链打开</option>
             <option value="2">微信/支付宝跳转打开</option>
+            <option value="3">生成防红二维码</option>
         </select>
         </br>
         <input type="button" value="生成" id="generateButton" onclick="getUrl()" />
@@ -66,6 +68,8 @@
     <div id="resultContainer">
         <!-- 短链接结果显示框 -->
     </div>
+
+    <div id="qrcode" style="text-align: center; margin-top: 20px;"></div>
 
     <footer id="footer">
         <ul class="icons">
@@ -100,10 +104,26 @@
             generateButton.disabled = true;
             generateButton.value = '正在生成...';
 
+            //选项
             if (type === '1') {
                 apiUrl = 'https://qilin8.zeabur.app/zhilian.html?u=' + btoa(targetUrl);
             } else if (type === '2') {
                 apiUrl = 'https://qilin8.zeabur.app/tzz.html?url=' + btoa(targetUrl);
+            } else if (type === '3') {
+                apiUrl = 'https://qilin8.zeabur.app/zhilian.html?u=' + btoa(targetUrl);
+                // 清除旧的二维码
+                document.getElementById('qrcode').innerHTML = '';
+                // 生成新的二维码
+                const qrImage = document.createElement('img');
+                qrImage.src = 'https://api.pwmqr.com/qrcode/create/?url=' + encodeURIComponent(apiUrl);
+                qrImage.style.maxWidth = '256px';
+                qrImage.style.margin = '10px auto';
+                qrImage.alt = '防红二维码';
+                document.getElementById('qrcode').appendChild(qrImage);
+                // 显示链接
+        resultContainer.innerHTML = `
+                    <div id="shortUrlDisplay" onclick="copyToClipboard()">${apiUrl}</div>
+                `;
             }
 
             generateButton.disabled = false;
@@ -137,6 +157,33 @@
                 event.preventDefault();
                 getUrl();
             }
+        }
+
+        function generateQR() {
+            const url = document.getElementById('url').value.trim();
+            if (!url) {
+                alert('请输入需要转换的链接');
+                return;
+            }
+            
+            // 使用正确的防红链接格式
+            const fhUrl = `https://qilin8.zeabur.app/zhilian.html?u=${encodeURIComponent(url)}`;
+            
+            // 清除旧的二维码
+            document.getElementById('qrcode').innerHTML = '';
+            
+            // 使用草料二维码API
+            const qrImage = document.createElement('img');
+            qrImage.src = 'https://api.pwmqr.com/qrcode/create/?url=' + encodeURIComponent(fhUrl);
+            qrImage.style.maxWidth = '256px';
+            qrImage.style.margin = '10px auto';
+            qrImage.alt = '防红二维码';
+            
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.appendChild(qrImage);
+            
+            // 显示生成的防红链接
+            document.getElementById('result').innerHTML = `<p style="margin-top: 10px;">防红链接：<a href="${fhUrl}" target="_blank">${fhUrl}</a></p>`;
         }
     </script>
 
